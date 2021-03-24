@@ -105,18 +105,25 @@ void Game::Map() {
 				std::cout << '>';
 			else if (arr_fencing[3].x == j && arr_fencing[3].y == i)
 				std::cout << '>';
-			else if (j == zombie_king.x1 && i == 1)
-				std::cout << "www";
-			else if (j == zombie_king.x2 && i == 2)
-				std::cout << "(*_*)";
-			else if (j == zombie_king.x3 && i == 3)
-				std::cout << "/(___)\\";
-			else if (j == zombie_king.x4 && i == 4)
-				std::cout << "/   \\";
+			else if (j == zombie_king.x1 && i == 1) {
+				Col(0, 6); std::cout << "www"; Col(0, 7);
+			}
+			else if (j == zombie_king.x2 && i == 2) {
+				Col(0, 2); std::cout << "(*_*)"; Col(0, 7);
+			}
+			else if (j == zombie_king.x3 && i == 3) {
+				Col(0, 2); std::cout << "/(___)\\"; Col(0, 7);
+			}
+			else if (j == zombie_king.x4 && i == 4) {
+				Col(0, 2); std::cout << "/   \\"; Col(0, 7);
+			}
 			else if (j == robo_zombie.x1 && i == 1)
 				std::cout << "/\\/\\\\";
 			else if (j == robo_zombie.x2 && i == 2)
-				std::cout << "(O_*)||";
+				if (!robo_zombie.second_phase)
+					std::cout << "(O_O)||";
+				else
+					std::cout << "(O_*)||";
 			else if (j == robo_zombie.x3 && i == 3)
 				std::cout << "=|__|\\\\";
 			else if (j == robo_zombie.x4 && i == 4)
@@ -156,21 +163,22 @@ void Game::Map() {
 		Col(1, 7);
 		setcur(2, 9); std::cout << "Profile - 'Z' \t Shop - 'X'\t Exit to the main menu - 'Q'\n";	Col(0, 7);
 		if (base.profile_open) {
-			Col(11, 0);
-			setcur(2, 11); std::cout << "\tPlayer profile: " << henry.name << "\n";
+			Col(5, 0);
+			setcur(2, 11); std::cout << "\tPlayer profile: " << henry.name << "\n";	Col(11, 0);
 			std::cout << "Character level: " << henry.LVL << "\n";
 			std::cout << "Zombie slain: " << henry.kill_zombie << "\n";
 			std::cout << "Weapon level: " << henry.LVL_Gun << "\n";
 			std::cout << "List of trophies: \n";
-			if (zombie_king.boss_RIP)
-				std::cout << "www\t Zombie King Crown\n";
+			if (zombie_king.boss_RIP) {
+				Col(0, 6); std::cout << "www"; Col(0, 7); std::cout << "\t Zombie King Crown\n";
+			}
 			if (robo_zombie.boss_RIP)
 				std::cout << "*\t Zombie cyborg eye\n";
 			Col(0, 7);
 		}
 		if (base.shop_open) {
-			Col(11, 0);
-			setcur(2, 11); std::cout << "\t Shop:\n";
+			Col(5, 0);
+			setcur(2, 11); std::cout << "\t Shop:\n"; Col(11, 0);
 			std::cout << "Replenish base health by 1 unit:\t 10 coins\t '1'\n";
 			std::cout << "Upgrading weapons:   " << "Weapons level: " << henry.LVL_Gun << "  \t " << base.price_gun << " coins\t '2'\n";
 			std::cout << "Build a safety fence:  \t  \t \t" << " 10 coins\t '3'\n"; Col(0, 7);

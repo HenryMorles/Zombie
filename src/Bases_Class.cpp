@@ -17,7 +17,7 @@ void Bases_Class::Logic(bool& game_over) {
 	if (hp_base <= 0)
 		game_over = true;
 }
-void Bases_Class::Control_Menu(bool& game_over,int &LVL_Gun,int &time_recharge,int &henry_y,Fencings *arr_fencing) {
+void Bases_Class::Control_Menu(bool& game_over, int& LVL_Gun, int& time_recharge, int& henry_y, Fencings* arr_fencing) {
 	if (GetAsyncKeyState((unsigned short)'M') & 0x4D) {
 		open_menu = false;
 		profile_open = false;
@@ -30,7 +30,8 @@ void Bases_Class::Control_Menu(bool& game_over,int &LVL_Gun,int &time_recharge,i
 		shop_score = false;
 	}
 	if (GetAsyncKeyState((unsigned short)'X') & 0x51) {
-		!shop_open ? shop_open = true : 0;
+		if (!shop_open)
+			shop_open = true;
 		profile_open = false;
 		profile_score = false;
 	}
@@ -46,7 +47,8 @@ void Bases_Class::Control_Menu(bool& game_over,int &LVL_Gun,int &time_recharge,i
 	if (GetAsyncKeyState((unsigned short)'2') & 0x51) {
 		if (shop_open) {
 			if (coin >= price_gun && LVL_Gun <= 9) {
-				LVL_Gun % 2 == 0 ? time_recharge-- : 0;
+				if (LVL_Gun % 2 == 0)
+					time_recharge--;
 				LVL_Gun++;
 				coin -= price_gun;
 				price_gun += 10;
@@ -58,13 +60,11 @@ void Bases_Class::Control_Menu(bool& game_over,int &LVL_Gun,int &time_recharge,i
 			if (coin >= 10) {
 				int j = 1;
 				for (int i = 0; i < 4; i++, j++)
-					henry_y == j ? !arr_fencing[i].build ? arr_fencing[i].build = true, arr_fencing[i].y = j, coin = coin - 10 : 0 : 0;
+					if (henry_y == j && !arr_fencing[i].build)
+						arr_fencing[i].build = true, arr_fencing[i].y = j, coin = coin - 10;
 			}
 		}
 	}
-}
-void Bases_Class::Setup() {
-
 }
 Bases_Class::Fencings::Fencings() {
 	bool build = false;
@@ -72,6 +72,5 @@ Bases_Class::Fencings::Fencings() {
 	int y = 100;
 }
 void Bases_Class::Fencings::Logic(int Y) {
-	build ? x = 4, y = Y : 0;
-	!build ? x = -100, y = -100 : 0;
+	build ? x = 4, y = Y : x = -100, y = -100;
 }

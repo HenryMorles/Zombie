@@ -1,6 +1,4 @@
 #include "Header/Game.h"
-using namespace std;
-
 
 int main() {
 	Game game;

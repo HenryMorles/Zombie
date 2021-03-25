@@ -45,16 +45,16 @@ void Game::Control() {
 			henry.y++;
 	if (GetAsyncKeyState((unsigned short)'D') & 0x4B) {
 		test++;
-		if (bullet_number == 0)
-			henry.recharge == 0 ? arr_bullet[0].Update(henry), bullet_number = 1 : 0;
-		else if (bullet_number == 1)
-			henry.recharge == 0 ? arr_bullet[1].Update(henry), bullet_number = 2 : 0;
-		else if (bullet_number == 2)
-			henry.recharge == 0 ? arr_bullet[2].Update(henry), bullet_number = 3 : 0;
-		else if (bullet_number == 3)
-			henry.recharge == 0 ? arr_bullet[3].Update(henry), bullet_number = 4 : 0;
-		else if (bullet_number == 4)
-			henry.recharge == 0 ? arr_bullet[4].Update(henry), bullet_number = 0 : 0;
+		if (bullet_number == 0 && henry.recharge == 0)
+			arr_bullet[0].Update(henry), bullet_number = 1;
+		else if (bullet_number == 1 && henry.recharge == 0)
+			arr_bullet[1].Update(henry), bullet_number = 2;
+		else if (bullet_number == 2 && henry.recharge == 0)
+			arr_bullet[2].Update(henry), bullet_number = 3;
+		else if (bullet_number == 3 && henry.recharge == 0)
+			arr_bullet[3].Update(henry), bullet_number = 4;
+		else if (bullet_number == 4 && henry.recharge == 0)
+			arr_bullet[4].Update(henry), bullet_number = 0;
 	}
 	if (GetAsyncKeyState((unsigned short)'M') & 0x4D) {
 		base.open_menu = true;
@@ -148,13 +148,15 @@ void Game::Map() {
 		std::cout << "Back to the game:  'm'\n\n";
 	Col(0, 7);
 	if (!zombie_king.dead) {
-		zombie_king.restart_hp == 1 ? zombie_king.hp = 30, zombie_king.restart_hp = 0 : 0;
+		if (zombie_king.restart_hp == 1)
+			zombie_king.hp = 30, zombie_king.restart_hp = 0;
 		std::cout << "\tZOMBIE KING \n \t";
 		std::cout << "HP Zombie King: " << zombie_king.hp;
 		std::cout << "\n";
 	}
 	if (!robo_zombie.dead) {
-		robo_zombie.restart_hp == 1 ? robo_zombie.hp = 50, robo_zombie.restart_hp = 0 : 0;
+		if (robo_zombie.restart_hp == 1)
+			robo_zombie.hp = 50, robo_zombie.restart_hp = 0;
 		std::cout << "\tZOMBIE CYBORG \n \t";
 		std::cout << "HP Zombie cyborg: " << robo_zombie.hp;
 		std::cout << "\n";
@@ -184,6 +186,9 @@ void Game::Map() {
 			std::cout << "Build a safety fence:  \t  \t \t" << " 10 coins\t '3'\n"; Col(0, 7);
 		}
 	}
+}
+void Game::Setup() {
+
 }
 void Game::Start() {
 	while (!game_over) {

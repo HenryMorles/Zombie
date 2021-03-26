@@ -11,12 +11,13 @@ Hero_Class::Hero_Class() {
 	kill_zombie = 0;
 	LVL_Gun = 1;
 }
-void Hero_Class::Bullets::Update(Hero_Class& henry) {
+void Hero_Class::Bullets::Update(Hero_Class& henry) {//Reusing bullets
 	int tempX;
 	int tempY;
 	active = true, tempX = henry.x, tempY = henry.y, x = tempX, y = tempY, henry.recharge = henry.time_recharge;
 }
 void Hero_Class::Logic() {
+	//LVL up
 	if(kol_skill < 50)
 		LVL = 1;
 	else if(kol_skill > 50 && kol_skill < 100)
@@ -42,26 +43,21 @@ void Hero_Class::Logic() {
 	if (recharge)
 		recharge--;
 }
-void Hero_Class::SetName(std::string name) {
-	this->name = name;
-}
 Hero_Class::Bullets::Bullets() {
 	x = 1100;
 	y = 1100;
 	active = false;
+	can_not_see = -1000;
 }
 void Hero_Class::Bullets::Logic(King_Zombies& zombie_king, Robo_Zombies &robo_zombie, Robo_Zombies::Robo_Bullet* arr_robo_b, int& width) {
-	if(zombie_king.x1 == x || zombie_king.x2 == x || zombie_king.x3 == x || zombie_king.x4 == x)
-		zombie_king.hp--, x = 11100;
-	if(robo_zombie.x1 == x || robo_zombie.x2 == x || robo_zombie.x3 == x || robo_zombie.x4 == x)
-		robo_zombie.hp--, x = 11100;
-	for (int i = 0; i < 4; i++)
-			if(robo_zombie.arr_xz[i] == x)
-				robo_zombie.hp--, x = 100;
-	for (int i = 0; i < 3; i++)
+	if(zombie_king.x1 == x || zombie_king.x2 == x || zombie_king.x3 == x || zombie_king.x4 == x)//Interaction with the first boss
+		zombie_king.hp--, x = can_not_see;
+	if (robo_zombie.x1 == x || robo_zombie.x2 == x || robo_zombie.x3 == x || robo_zombie.x4 == x)//Interaction with the second boss
+		robo_zombie.hp--, x = can_not_see;
+	for (int i = 0; i < 3; i++)//Interaction of boss bullets and player bullets
 		if(arr_robo_b[i].bulletX == x && arr_robo_b[i].bulletY == y) 
-			arr_robo_b[i].bulletX = 1234, x = 11100, arr_robo_b[i].activ = false;
+			arr_robo_b[i].bulletX = 1234, x = can_not_see, arr_robo_b[i].activ = false;
 	this->active ? x++ : 0;//Bullet movement
-	if(this->x == width)
+	if(this->x == width)//If the bullet reaches the end of the map, it is removed
 		this->active = false;
 }

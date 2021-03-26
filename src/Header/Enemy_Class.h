@@ -8,5 +8,6 @@ public:
 	int y;
 	bool dead;
 	int speed;
+	int can_not_see;//If the object should not be displayed on the map, these coordinates are assigned to it
 };
 #endif

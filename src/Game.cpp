@@ -1,12 +1,12 @@
 #include "Header/Game.h"
+#include <string>
 
 Game::Game() {
 	rand2 = rand() % 20;
 	width = 30;
-	game_over = false;
+	game_over = true;
 	new_game = true;
 	bullet_number = 0;
-	test = 0;
 }
 void Col(int bg, int txt) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -19,7 +19,7 @@ void setcur(int x, int y) {
 	coord.Y = y;
 	SetConsoleCursorPosition(hConsole, coord);
 }
-void Game::Logic_Game() {
+void Game::Logic_Game() {//Calling the logic of all objects
 	for (int i = 0; i < 4; i++)
 		arr_zombies[i].Logic(base, henry, arr_bullet, arr_fencing, zombie_king, robo_zombie, rand2);
 	if (base.score > 1000)
@@ -34,9 +34,9 @@ void Game::Logic_Game() {
 	for (int i = 0; i < 3; i++)
 		arr_robo_b[i].Logic(i + 1, robo_zombie, base);
 	for (int i = 0; i < 4; i++)
-		arr_fencing[i].Logic(i + 1);
+		arr_fencing[i].Logic();
 }
-void Game::Control() {
+void Game::Control() {//Control in game
 	if (GetAsyncKeyState((unsigned short)'W') & 0x57)
 		if (henry.y != 1)
 			henry.y--;
@@ -44,7 +44,6 @@ void Game::Control() {
 		if (henry.y != 4)
 			henry.y++;
 	if (GetAsyncKeyState((unsigned short)'D') & 0x4B) {
-		test++;
 		if (bullet_number == 0 && henry.recharge == 0)
 			arr_bullet[0].Update(henry), bullet_number = 1;
 		else if (bullet_number == 1 && henry.recharge == 0)
@@ -61,7 +60,21 @@ void Game::Control() {
 		base.score_menu = true;
 	}
 }
-void Game::Map() {
+void Game::Main_Menu() {//Main menu. Start game or exit
+	system("cls");
+	char str1[30];
+	std::cout << "\t\t\t ZOMBIE GAME\n\n";
+	std::cout << "1. Start the game\n" << "2. Exit\n";
+	if (GetAsyncKeyState((unsigned short)'1') & 0x61) {
+		std::cout << "Enter name: ";
+		std::cin.get(str1, 30);
+		henry.name = str1;
+		game_over = false;
+	}
+	if (GetAsyncKeyState((unsigned short)'2') & 0x61)
+		new_game = false;
+}
+void Game::Map() {//Rendering the map
 	system("cls");
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < width; j++) {
@@ -141,7 +154,7 @@ void Game::Map() {
 	}
 	std::cout << "Score: " << base.score << "\n";
 	Col(4, 7);
-	setcur(2, 7); std::cout << "Base health: " << base.hp_base << "\t" << "Coins: " << base.coin << "\t Test: " << test << "\t";
+	setcur(2, 7); std::cout << "Base health: " << base.hp_base << "\t" << "Coins: " << base.coin << "\t";
 	if (base.score_menu == 0)
 		std::cout << "Open the menu:  'm'\n\n";
 	if (base.score_menu == 1)
@@ -150,14 +163,14 @@ void Game::Map() {
 	if (!zombie_king.dead) {
 		if (zombie_king.restart_hp == 1)
 			zombie_king.hp = 30, zombie_king.restart_hp = 0;
-		std::cout << "\tZOMBIE KING \n \t";
+		std::cout << "\n\tZOMBIE KING \n \t";
 		std::cout << "HP Zombie King: " << zombie_king.hp;
 		std::cout << "\n";
 	}
 	if (!robo_zombie.dead) {
 		if (robo_zombie.restart_hp == 1)
 			robo_zombie.hp = 50, robo_zombie.restart_hp = 0;
-		std::cout << "\tZOMBIE CYBORG \n \t";
+		std::cout << "\n\tZOMBIE CYBORG \n \t";
 		std::cout << "HP Zombie cyborg: " << robo_zombie.hp;
 		std::cout << "\n";
 	}
@@ -187,19 +200,36 @@ void Game::Map() {
 		}
 	}
 }
-void Game::Setup() {
-
+void Game::Setup() {//Returning objects to their original parameters for replaying
+	base.Bases_Class::Bases_Class();
+	for (int i = 0; i < 4; i++)
+		arr_fencing[i].Bases_Class::Fencings::Fencings(i + 1);
+	zombie_king.King_Zombies::King_Zombies();
+	robo_zombie.Robo_Zombies::Robo_Zombies();
+	for (int i = 0; i < 3; i++)
+		arr_robo_b[i].Robo_Zombies::Robo_Bullet::Robo_Bullet();
+	for (int i = 0; i < 4; i++)
+		arr_zombies[i].Zombies_Class::Zombies_Class(i + 1);
+	for (int i = 4; i < 8; i++)
+		arr_zombies[i].Zombies_Class::Zombies_Class(i - 3);
+	henry.Hero_Class::Hero_Class();
+	for (int i = 0; i < 5; i++)
+		arr_bullet[i].Hero_Class::Bullets::Bullets();
 }
 void Game::Start() {
-	while (!game_over) {
-		Map();
-		Logic_Game();
-		Control();
-		while (base.open_menu) {
+	while (new_game) {
+		Main_Menu();
+		Setup();
+		while (!game_over) {
 			Map();
-			for (int i = 0; i < 4; i++)
-				arr_fencing[i].Logic(i + 1);
-			base.Control_Menu(game_over, henry.LVL_Gun, henry.time_recharge, henry.y, arr_fencing);
+			Logic_Game();
+			Control();
+			while (base.open_menu) {
+				Map();
+				for (int i = 0; i < 4; i++)
+					arr_fencing[i].Logic();
+				base.Control_Menu(game_over, henry.LVL_Gun, henry.time_recharge, henry.y, arr_fencing);
+			}
 		}
 	}
 }

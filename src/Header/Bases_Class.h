@@ -1,6 +1,6 @@
 #ifndef BASES_CLASS_H_
 #define BASES_CLASS_H_
-class Bases_Class {
+class Bases_Class {//The evacuator class to defend
 public:
 	int hp_base;
 	bool shop_open;
@@ -14,15 +14,16 @@ public:
 	int coin;
 	Bases_Class();
 	void Logic(bool& game_over);
-	void Setup();
-	class Fencings {
+	class Fencings {//Safety fence class
 	public:
 		bool build;
 		int x;
 		int y;
-		Fencings();
-		void Logic(int Y);
+		int can_not_see;
+		Fencings(int Y);
+		void Logic();
 	};
+	//Store management function
 	void Control_Menu(bool& game_over, int& LVL_Gun, int& time_recharge,int &henry_y, Fencings* arr_fencing);
 };
 #endif

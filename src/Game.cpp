@@ -62,15 +62,10 @@ void Game::Control() {//Control in game
 }
 void Game::Main_Menu() {//Main menu. Start game or exit
 	system("cls");
-	char str1[30];
 	std::cout << "\t\t\t ZOMBIE GAME\n\n";
 	std::cout << "1. Start the game\n" << "2. Exit\n";
-	if (GetAsyncKeyState((unsigned short)'1') & 0x61) {
-		std::cout << "Enter name: ";
-		std::cin.get(str1, 30);
-		henry.name = str1;
+	if (GetAsyncKeyState((unsigned short)'1') & 0x61) 
 		game_over = false;
-	}
 	if (GetAsyncKeyState((unsigned short)'2') & 0x61)
 		new_game = false;
 }
@@ -94,7 +89,7 @@ void Game::Map() {//Rendering the map
 				std::cout << '.';
 			else if (arr_bullet[4].x == j && arr_bullet[4].y == i)
 				std::cout << '.';
-			else if (arr_zombies[0].x == j && arr_zombies[0].y == i)
+			else if(arr_zombies[0].x == j && arr_zombies[0].y == i)
 				std::cout << '@';
 			else if (arr_zombies[1].x == j && arr_zombies[1].y == i)
 				std::cout << '@';
@@ -179,7 +174,7 @@ void Game::Map() {//Rendering the map
 		setcur(2, 9); std::cout << "Profile - 'Z' \t Shop - 'X'\t Exit to the main menu - 'Q'\n";	Col(0, 7);
 		if (base.profile_open) {
 			Col(5, 0);
-			setcur(2, 11); std::cout << "\tPlayer profile: " << henry.name << "\n";	Col(11, 0);
+			setcur(2, 11); std::cout << "\tPlayer profile: \n";	Col(11, 0);
 			std::cout << "Character level: " << henry.LVL << "\n";
 			std::cout << "Zombie slain: " << henry.kill_zombie << "\n";
 			std::cout << "Weapon level: " << henry.LVL_Gun << "\n";

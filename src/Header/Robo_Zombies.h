@@ -17,7 +17,6 @@ public:
 		int can_not_see;
 		Robo_Bullet();
 		void Logic(int Y, Robo_Zombies& robo_zombie, Bases_Class& base);
-		void Drawing_on_the_map(int X, int Y);
 	};
 };
 #endif

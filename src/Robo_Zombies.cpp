@@ -48,10 +48,6 @@ Robo_Zombies::Robo_Bullet::Robo_Bullet() {
 	bulletY = can_not_see;
 	activ = false;
 }
-void Robo_Zombies::Robo_Bullet::Drawing_on_the_map(int X, int Y) {
-	if (bulletX == X && bulletY == Y)
-		std::cout << '*';
-}
 void Robo_Zombies::Robo_Bullet::Logic(int Y, Robo_Zombies& robo_zombie, Bases_Class& base) {
 	bulletY = Y;
 	int RandZ = rand() % 10;

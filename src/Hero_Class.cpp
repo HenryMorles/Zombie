@@ -54,10 +54,6 @@ Hero_Class::Bullets::Bullets() {
 	active = false;
 	can_not_see = -1000;
 }
-void Hero_Class::Bullets::Drawing_on_the_map(int X, int Y) {
-	if (x == X && y == Y)
-		std::cout << '.';
-}
 void Hero_Class::Bullets::Logic(King_Zombies& zombie_king, Robo_Zombies& robo_zombie, Robo_Zombies::Robo_Bullet* arr_robo_b, int& width) {
 	if (zombie_king.x1 == x || zombie_king.x2 == x || zombie_king.x3 == x || zombie_king.x4 == x)//Interaction with the first boss
 		zombie_king.hp--, x = can_not_see;

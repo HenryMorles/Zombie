@@ -14,6 +14,9 @@ public:
 	int coin;
 	Bases_Class();
 	void Logic(bool& game_over);
+	void Drawing_on_the_map(int X, int Y);
+	void Col(int bg, int txt);
+	void setcur(int x, int y);
 	class Fencings {//Safety fence class
 	public:
 		bool build;
@@ -22,6 +25,7 @@ public:
 		int can_not_see;
 		Fencings(int Y);
 		void Logic();
+		void Drawing_on_the_map(int X, int Y);
 	};
 	//Store management function
 	void Control_Menu(bool& game_over, int& LVL_Gun, int& time_recharge,int &henry_y, Fencings* arr_fencing);

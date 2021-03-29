@@ -8,17 +8,6 @@ Game::Game() {
 	new_game = true;
 	bullet_number = 0;
 }
-void Col(int bg, int txt) {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, (WORD)(bg << 4) | txt);
-}
-void setcur(int x, int y) {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD coord;
-	coord.X = x;
-	coord.Y = y;
-	SetConsoleCursorPosition(hConsole, coord);
-}
 void Game::Logic_Game() {//Calling the logic of all objects
 	for (int i = 0; i < 4; i++)
 		arr_zombies[i].Logic(base, henry, arr_bullet, arr_fencing, zombie_king, robo_zombie, rand2);
@@ -64,7 +53,7 @@ void Game::Main_Menu() {//Main menu. Start game or exit
 	system("cls");
 	std::cout << "\t\t\t ZOMBIE GAME\n\n";
 	std::cout << "1. Start the game\n" << "2. Exit\n";
-	if (GetAsyncKeyState((unsigned short)'1') & 0x61) 
+	if (GetAsyncKeyState((unsigned short)'1') & 0x61)
 		game_over = false;
 	if (GetAsyncKeyState((unsigned short)'2') & 0x61)
 		new_game = false;
@@ -73,10 +62,8 @@ void Game::Map() {//Rendering the map
 	system("cls");
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < width; j++) {
-			if (i == 0 || i == 6 - 1)
+			if (i == 0 || i == 5)
 				std::cout << '#';
-			else if (i != 0 && i != 6 - 1 && j == 3)
-				std::cout << '|';
 			else if (henry.x == j && henry.y == i)
 				std::cout << '$';
 			else if (arr_bullet[0].x == j && arr_bullet[0].y == i)
@@ -89,53 +76,6 @@ void Game::Map() {//Rendering the map
 				std::cout << '.';
 			else if (arr_bullet[4].x == j && arr_bullet[4].y == i)
 				std::cout << '.';
-			else if(arr_zombies[0].x == j && arr_zombies[0].y == i)
-				std::cout << '@';
-			else if (arr_zombies[1].x == j && arr_zombies[1].y == i)
-				std::cout << '@';
-			else if (arr_zombies[2].x == j && arr_zombies[2].y == i)
-				std::cout << '@';
-			else if (arr_zombies[3].x == j && arr_zombies[3].y == i)
-				std::cout << '@';
-			else if (arr_zombies[4].x == j && arr_zombies[4].y == i)
-				std::cout << '@';
-			else if (arr_zombies[5].x == j && arr_zombies[5].y == i)
-				std::cout << '@';
-			else if (arr_zombies[6].x == j && arr_zombies[6].y == i)
-				std::cout << '@';
-			else if (arr_zombies[7].x == j && arr_zombies[7].y == i)
-				std::cout << '@';
-			else if (arr_fencing[0].x == j && arr_fencing[0].y == i)
-				std::cout << '>';
-			else if (arr_fencing[1].x == j && arr_fencing[1].y == i)
-				std::cout << '>';
-			else if (arr_fencing[2].x == j && arr_fencing[2].y == i)
-				std::cout << '>';
-			else if (arr_fencing[3].x == j && arr_fencing[3].y == i)
-				std::cout << '>';
-			else if (j == zombie_king.x1 && i == 1) {
-				Col(0, 6); std::cout << "www"; Col(0, 7);
-			}
-			else if (j == zombie_king.x2 && i == 2) {
-				Col(0, 2); std::cout << "(*_*)"; Col(0, 7);
-			}
-			else if (j == zombie_king.x3 && i == 3) {
-				Col(0, 2); std::cout << "/(___)\\"; Col(0, 7);
-			}
-			else if (j == zombie_king.x4 && i == 4) {
-				Col(0, 2); std::cout << "/   \\"; Col(0, 7);
-			}
-			else if (j == robo_zombie.x1 && i == 1)
-				std::cout << "/\\/\\\\";
-			else if (j == robo_zombie.x2 && i == 2)
-				if (!robo_zombie.second_phase)
-					std::cout << "(O_O)||";
-				else
-					std::cout << "(O_*)||";
-			else if (j == robo_zombie.x3 && i == 3)
-				std::cout << "=|__|\\\\";
-			else if (j == robo_zombie.x4 && i == 4)
-				std::cout << "//  \\\\";
 			else if (j == arr_robo_b[0].bulletX && i == 1)
 				std::cout << '*';
 			else if (j == arr_robo_b[1].bulletX && i == 2)
@@ -144,17 +84,24 @@ void Game::Map() {//Rendering the map
 				std::cout << '*';
 			else
 				std::cout << ' ';
+			base.Drawing_on_the_map(j, i);
+			robo_zombie.Drawing_on_the_map(j, i);
+			zombie_king.Drawing_on_the_map(j, i, base);
+			for (int x = 0; x < 8; x++)
+				arr_zombies[x].Drawing_on_the_map(j, i);
+			for (int x = 0; x < 4; x++)
+				arr_fencing[x].Drawing_on_the_map(j + 1, i);
 		}
 		std::cout << "\n";
 	}
 	std::cout << "Score: " << base.score << "\n";
-	Col(4, 7);
-	setcur(2, 7); std::cout << "Base health: " << base.hp_base << "\t" << "Coins: " << base.coin << "\t";
+	base.Col(4, 7);
+	base.setcur(2, 7); std::cout << "Base health: " << base.hp_base << "\t" << "Coins: " << base.coin << "\t";
 	if (base.score_menu == 0)
 		std::cout << "Open the menu:  'm'\n\n";
 	if (base.score_menu == 1)
 		std::cout << "Back to the game:  'm'\n\n";
-	Col(0, 7);
+	base.Col(0, 7);
 	if (!zombie_king.dead) {
 		if (zombie_king.restart_hp == 1)
 			zombie_king.hp = 30, zombie_king.restart_hp = 0;
@@ -170,28 +117,28 @@ void Game::Map() {//Rendering the map
 		std::cout << "\n";
 	}
 	if (base.open_menu) {
-		Col(1, 7);
-		setcur(2, 9); std::cout << "Profile - 'Z' \t Shop - 'X'\t Exit to the main menu - 'Q'\n";	Col(0, 7);
+		base.Col(1, 7);
+		base.setcur(2, 9); std::cout << "Profile - 'Z' \t Shop - 'X'\t Exit to the main menu - 'Q'\n";	base.Col(0, 7);
 		if (base.profile_open) {
-			Col(5, 0);
-			setcur(2, 11); std::cout << "\tPlayer profile: \n";	Col(11, 0);
+			base.Col(5, 0);
+			base.setcur(2, 11); std::cout << "\tPlayer profile: \n";	base.Col(11, 0);
 			std::cout << "Character level: " << henry.LVL << "\n";
 			std::cout << "Zombie slain: " << henry.kill_zombie << "\n";
 			std::cout << "Weapon level: " << henry.LVL_Gun << "\n";
 			std::cout << "List of trophies: \n";
 			if (zombie_king.boss_RIP) {
-				Col(0, 6); std::cout << "www"; Col(0, 7); std::cout << "\t Zombie King Crown\n";
+				base.Col(0, 6); std::cout << "www"; base.Col(0, 7); std::cout << "\t Zombie King Crown\n";
 			}
 			if (robo_zombie.boss_RIP)
 				std::cout << "*\t Zombie cyborg eye\n";
-			Col(0, 7);
+			base.Col(0, 7);
 		}
 		if (base.shop_open) {
-			Col(5, 0);
-			setcur(2, 11); std::cout << "\t Shop:\n"; Col(11, 0);
+			base.Col(5, 0);
+			base.setcur(2, 11); std::cout << "\t Shop:\n"; base.Col(11, 0);
 			std::cout << "Replenish base health by 1 unit:\t 10 coins\t '1'\n";
 			std::cout << "Upgrading weapons:   " << "Weapons level: " << henry.LVL_Gun << "  \t " << base.price_gun << " coins\t '2'\n";
-			std::cout << "Build a safety fence:  \t  \t \t" << " 10 coins\t '3'\n"; Col(0, 7);
+			std::cout << "Build a safety fence:  \t  \t \t" << " 10 coins\t '3'\n"; base.Col(0, 7);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿#include "Header/Zombie_Class.h"
 #include "Header/Bases_Class.h"
 #include "Header/King_Zombies.h"
+#include <iostream>
 Zombies_Class::Zombies_Class(int Y) {
 	dead = true;
 	hp = 2;
@@ -8,6 +9,10 @@ Zombies_Class::Zombies_Class(int Y) {
 	x = 30;
 	y = Y;
 	can_not_see = -2200;
+}
+void Zombies_Class::Drawing_on_the_map(int X,int Y) {
+	if (x == X && y == Y)
+		std::cout << '@';
 }
 void Zombies_Class::Logic(Bases_Class& base, Hero_Class& henry, Hero_Class::Bullets* arr_bullet, Bases_Class::Fencings* arr_fencing, King_Zombies& zombie_king, Robo_Zombies& robo_zombie, int& rand2) {
 	if (base.score % speed == 0)
@@ -25,7 +30,7 @@ void Zombies_Class::Logic(Bases_Class& base, Hero_Class& henry, Hero_Class::Bull
 		x = can_not_see;
 	if (dead == true && rand2 == rand() % 20)//Zombie respawn
 		x = 30, dead = false;
-	if (x == 0)//Respawn a zombie if it reaches the base
+	if (x == 3)//Respawn a zombie if it reaches the base
 		dead = true, hp = 2;
 	for (int i = 0; i < 4; i++)//Interaction with fences
 		if (x == arr_fencing[i].x && y == arr_fencing[i].y)

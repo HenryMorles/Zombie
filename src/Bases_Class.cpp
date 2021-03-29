@@ -1,5 +1,6 @@
 #include "Header/Bases_Class.h"
 #include <Windows.h>
+#include <iostream>
 Bases_Class::Bases_Class() {
 	hp_base = 10;
 	shop_open = false;
@@ -12,10 +13,25 @@ Bases_Class::Bases_Class() {
 	score = 0;
 	coin = 0;
 }
+void Bases_Class::Drawing_on_the_map(int X, int Y) {
+	if (Y != 0 && Y != 6 - 1 && X == 3)
+		std::cout << '|';
+}
 void Bases_Class::Logic(bool& game_over) {
 	score++;
 	if (hp_base <= 0)
 		game_over = true;
+}
+void Bases_Class::Col(int bg, int txt) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (WORD)(bg << 4) | txt);
+}
+void Bases_Class::setcur(int x, int y) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(hConsole, coord);
 }
 //Control in game
 void Bases_Class::Control_Menu(bool& game_over, int& LVL_Gun, int& time_recharge, int& henry_y, Fencings* arr_fencing) {
@@ -68,10 +84,14 @@ void Bases_Class::Control_Menu(bool& game_over, int& LVL_Gun, int& time_recharge
 	}
 }
 Bases_Class::Fencings::Fencings(int Y) {
-	 build = false;
-	 can_not_see = -7200;
-	 x = 100;
-	 y = Y;
+	build = false;
+	can_not_see = -7200;
+	x = 100;
+	y = Y;
+}
+void Bases_Class::Fencings::Drawing_on_the_map(int X, int Y) {
+	if (x == X && y == Y)
+		std::cout << '>';
 }
 void Bases_Class::Fencings::Logic() {
 	build ? x = 4 : x = can_not_see;

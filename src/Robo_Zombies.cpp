@@ -1,6 +1,7 @@
 #include "Header/Robo_Zombies.h"
 #include "Header/Bases_Class.h"
 #include "Header/Hero_Class.h"
+#include <iostream>
 Robo_Zombies::Robo_Zombies() {
 	dead = true;
 	hp = 50;
@@ -13,6 +14,19 @@ Robo_Zombies::Robo_Zombies() {
 	x4 = -433;
 	can_not_see = -3004;
 	second_phase = false;
+}
+void Robo_Zombies::Drawing_on_the_map(int X, int Y) {
+	if (X == x1 && Y == 1)
+		std::cout << "/\\/\\\\";
+	if (X == x2 && Y == 2)
+		if (!second_phase)
+			std::cout << "(O_O)||";
+		else
+			std::cout << "(O_*)||";
+	if (X == x3 && Y == 3)
+		std::cout << "=|__|\\\\";
+	if (X == x4 && Y == 4)
+		std::cout << "//  \\\\";
 }
 void Robo_Zombies::Logic(Bases_Class& base, int& kol_skill) {
 	if (base.score == 2000)//The second boss spawns when the score is 2000
@@ -34,17 +48,21 @@ Robo_Zombies::Robo_Bullet::Robo_Bullet() {
 	bulletY = can_not_see;
 	activ = false;
 }
+void Robo_Zombies::Robo_Bullet::Drawing_on_the_map(int X, int Y) {
+	if (bulletX == X && bulletY == Y)
+		std::cout << '*';
+}
 void Robo_Zombies::Robo_Bullet::Logic(int Y, Robo_Zombies& robo_zombie, Bases_Class& base) {
 	bulletY = Y;
 	int RandZ = rand() % 10;
-	if(robo_zombie.x2 == 27)//When the boss reaches coordinates 27, he starts shooting
+	if (robo_zombie.x2 == 27)//When the boss reaches coordinates 27, he starts shooting
 		bulletX = robo_zombie.x1;
-	if((bulletX == 3)&& (bulletY > 0 && bulletY < 5))//Damage base
+	if ((bulletX == 3) && (bulletY > 0 && bulletY < 5))//Damage base
 		base.hp_base--, bulletX = can_not_see, activ = false;
 	if (!robo_zombie.second_phase && activ == false && RandZ == rand() % 15)//Reuse
 		activ = true, bulletX = robo_zombie.x1;
-	if(!robo_zombie.second_phase&& base.score % 5 == 0)//Bullet speed
+	if (!robo_zombie.second_phase && base.score % 5 == 0)//Bullet speed
 		bulletX--;
-	if(robo_zombie.second_phase)//If the second phase of the boss is active, he does not shoot
+	if (robo_zombie.second_phase)//If the second phase of the boss is active, he does not shoot
 		bulletX = can_not_see, bulletY = can_not_see;
 }

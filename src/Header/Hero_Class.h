@@ -16,6 +16,7 @@ public:
 	int LVL_Gun;
 	Hero_Class();
 	void Logic();
+	void Drawing_on_the_map(int X, int Y);
 	class Bullets {//The class of bullets that the player shoots
 	public:
 		int x;
@@ -23,6 +24,7 @@ public:
 		bool active;
 		int can_not_see;
 		Bullets();
+		void Drawing_on_the_map(int X, int Y);
 		void Update(Hero_Class& henry);//Using bullets in a circle
 		void Logic(King_Zombies& zombie_king, Robo_Zombies& robo_zombie, Robo_Zombies::Robo_Bullet* arr_robo_b, int& width);
 	};
